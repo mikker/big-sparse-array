@@ -14,7 +14,7 @@ Similar to a Map, except it is faster, but might use a bit more memory, ymmv.
 
 ## Usage
 
-``` js
+```js
 const BigSparseArray = require('big-sparse-array')
 
 const b = new BigSparseArray()

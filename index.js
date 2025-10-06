@@ -1,6 +1,6 @@
 const FACTOR = new Uint16Array(8)
 
-function factor4096 (i, n) {
+function factor4096(i, n) {
   while (n > 0) {
     const f = i & 4095
     FACTOR[--n] = f
@@ -10,13 +10,13 @@ function factor4096 (i, n) {
 }
 
 module.exports = class BigSparseArray {
-  constructor () {
+  constructor() {
     this.tiny = new TinyArray()
     this.maxLength = 4096
     this.factor = 1
   }
 
-  set (index, val) {
+  set(index, val) {
     if (val !== undefined) {
       while (index >= this.maxLength) {
         this.maxLength *= 4096
@@ -46,7 +46,7 @@ module.exports = class BigSparseArray {
     return tiny.set(f[last], val)
   }
 
-  get (index) {
+  get(index) {
     if (index >= this.maxLength) return
 
     const f = factor4096(index, this.factor)
@@ -63,24 +63,24 @@ module.exports = class BigSparseArray {
 }
 
 class TinyArray {
-  constructor () {
+  constructor() {
     this.s = 0
     this.b = new Array(1)
     this.f = new Uint16Array(1)
   }
 
-  isEmptyish () {
+  isEmptyish() {
     return this.b.length === 1 && this.b[0] === undefined
   }
 
-  get (i) {
+  get(i) {
     if (this.s === 12) return this.b[i]
     const f = i >>> this.s
     const r = i & (this.b.length - 1)
     return this.f[r] === f ? this.b[r] : undefined
   }
 
-  set (i, v) {
+  set(i, v) {
     while (this.s !== 12) {
       const f = i >>> this.s
       const r = i & (this.b.length - 1)
@@ -99,7 +99,7 @@ class TinyArray {
     return v
   }
 
-  grow () {
+  grow() {
     const os = this.s
     const ob = this.b
     const of = this.f
@@ -113,7 +113,7 @@ class TinyArray {
     for (let or = 0; or < ob.length; or++) {
       if (ob[or] === undefined) continue
 
-      const i = of[or] << os | or
+      const i = (of[or] << os) | or
       const f = i >>> this.s
       const r = i & m
 
